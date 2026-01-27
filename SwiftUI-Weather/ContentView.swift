@@ -33,7 +33,7 @@ struct ContentView: View {
                     size: .init(width: 160, height: 160)
                 )
                 Text("76°")
-                    .font(.system(size: 64, weight: .semibold))
+                    .font(.system(size: 64, weight: .regular))
                     .foregroundColor(.white)
                 forecastView
                     .padding(.top, 32)
@@ -61,57 +61,59 @@ struct ContentView: View {
         }
     }
     
-    struct WeatherImageView: View {
-        let name: String
-        let size: CGSize
-        
-        var body: some View {
-            Image(systemName: name)
-                .symbolRenderingMode(.multicolor)
-                .font(.system(size: size.width))
-        }
-    }
-    
-    struct DayView: View {
-        let day: String
-        let iconName: String
-        let temperature: String
-        
-        var body: some View {
-            VStack(alignment: .center, spacing: 16) {
-                Text(day)
-                    .font(.system(.title3, weight: .semibold))
-                    .foregroundColor(.white)
-                VStack(spacing: 8) {
-                    WeatherImageView(
-                        name: iconName,
-                        size: .init(width: 40, height: 40)
-                    )
-                    Text(temperature)
-                        .font(.system(size: 32, weight: .regular))
-                        .foregroundColor(.white)
-                }
-            }
-        }
-    }
-    
     var forecastView: some View {
         HStack(spacing: 16) {
-            DayView(day: "MON", iconName: "sun.max.fill", temperature: "74°")
-            DayView(day: "TUE", iconName: "sun.max.fill", temperature: "74°")
-            DayView(day: "WED", iconName: "sun.max.fill", temperature: "74°")
-            DayView(day: "THU", iconName: "sun.max.fill", temperature: "74°")
-            DayView(day: "FRI", iconName: "sun.max.fill", temperature: "74°")
+            DayView(day: "MON", iconName: "cloud.sun.fill", temperature: 6)
+            DayView(day: "TUE", iconName: "sun.max.fill", temperature: 4)
+            DayView(day: "WED", iconName: "wind.snow", temperature: 0)
+            DayView(day: "THU", iconName: "cloud.snow.fill", temperature: -2)
+            DayView(day: "FRI", iconName: "cloud.rain.fill", temperature: -4)
         }
     }
     
     var backgroundView: some View {
         LinearGradient(
-            gradient: .init(colors: [.blue, .white]),
+            gradient: .init(colors: [.blue, Color("lightBlue")]),
             startPoint: .topLeading,
             endPoint: .bottomTrailing
         )
         .ignoresSafeArea(.all)
+    }
+}
+
+struct WeatherImageView: View {
+    let name: String
+    let size: CGSize
+    
+    var body: some View {
+        Image(systemName: name)
+            .symbolRenderingMode(.multicolor)
+            .resizable()
+            .aspectRatio(contentMode: .fit)
+            .frame(width: size.width, height: size.height)
+    }
+}
+
+struct DayView: View {
+    let day: String
+    let iconName: String
+    let temperature: Int
+    
+    var body: some View {
+        VStack(alignment: .center, spacing: 16) {
+            Text(day)
+                .font(.system(.title3, weight: .semibold))
+                .foregroundColor(.white)
+            VStack(spacing: 8) {
+                WeatherImageView(
+                    name: iconName,
+                    size: .init(width: 40, height: 40)
+                )
+                Text("\(temperature)°")
+                    .font(.system(size: 32, weight: .regular))
+                    .foregroundColor(.white)
+            }
+        }
     }
 }
 
