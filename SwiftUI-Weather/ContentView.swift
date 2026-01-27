@@ -23,34 +23,86 @@ struct ContentView: View {
             alignment: .center,
             spacing: 32
         ) {
-            locationTextView
+            Text("Cupertino, CA")
+                .font(.system(.title, weight: .semibold))
+                .foregroundColor(.white)
+                .padding(.top, 16)
             VStack(spacing: 16) {
-                locationImageView
-                degreeTextView
+                WeatherImageView(
+                    name: "cloud.sun.fill",
+                    size: .init(width: 160, height: 160)
+                )
+                Text("76°")
+                    .font(.system(size: 64, weight: .semibold))
+                    .foregroundColor(.white)
+                forecastView
+                    .padding(.top, 32)
+                Spacer()
+                weatherButton
             }
             Spacer()
         }
     }
     
-    var locationTextView: some View {
-        Text("Cupertino, CA")
-            .font(.system(.title, design: .monospaced, weight: .semibold))
-            .foregroundColor(.white)
-            .padding(.top, 16)
+    var weatherButton: some View {
+        Button(
+            action: {
+                print("HELLO WORLD!")
+            }
+        ) {
+            Text("Change Time of Day")
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundColor(.blue)
+        }
+        .padding()
+        .background {
+            RoundedRectangle(cornerRadius: 12, style: .circular)
+                .fill(Color.white)
+        }
     }
     
-    var locationImageView: some View {
-        Image(systemName: "cloud.sun.fill")
-            .renderingMode(.original)
-            .resizable()
-            .aspectRatio(contentMode: .fit)
-            .frame(width: 180, height: 140)
+    struct WeatherImageView: View {
+        let name: String
+        let size: CGSize
+        
+        var body: some View {
+            Image(systemName: name)
+                .symbolRenderingMode(.multicolor)
+                .font(.system(size: size.width))
+        }
     }
     
-    var degreeTextView: some View {
-        Text("76°")
-            .font(.system(size: 64, weight: .bold, design: .monospaced))
-            .foregroundColor(.white)
+    struct DayView: View {
+        let day: String
+        let iconName: String
+        let temperature: String
+        
+        var body: some View {
+            VStack(alignment: .center, spacing: 16) {
+                Text(day)
+                    .font(.system(.title3, weight: .semibold))
+                    .foregroundColor(.white)
+                VStack(spacing: 8) {
+                    WeatherImageView(
+                        name: iconName,
+                        size: .init(width: 40, height: 40)
+                    )
+                    Text(temperature)
+                        .font(.system(size: 32, weight: .regular))
+                        .foregroundColor(.white)
+                }
+            }
+        }
+    }
+    
+    var forecastView: some View {
+        HStack(spacing: 16) {
+            DayView(day: "MON", iconName: "sun.max.fill", temperature: "74°")
+            DayView(day: "TUE", iconName: "sun.max.fill", temperature: "74°")
+            DayView(day: "WED", iconName: "sun.max.fill", temperature: "74°")
+            DayView(day: "THU", iconName: "sun.max.fill", temperature: "74°")
+            DayView(day: "FRI", iconName: "sun.max.fill", temperature: "74°")
+        }
     }
     
     var backgroundView: some View {
