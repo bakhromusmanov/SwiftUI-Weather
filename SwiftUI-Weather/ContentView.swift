@@ -49,19 +49,16 @@ struct WeatherButton: View {
     let action: () -> Void
     
     var body: some View {
-        Button(
-            action: {
-                action()
-            },
-            label: {
-                Text(title)
-                    .padding()
-                    .font(.system(size: 16, weight: .semibold))
-                    .foregroundColor(textColor)
-                    .background(backgroundColor)
-                    .clipShape(.rect(cornerRadius: 12))
-            }
-        )
+        Button {
+            action()
+        } label: {
+            Text(title)
+                .padding()
+                .font(.system(size: 16, weight: .semibold))
+                .foregroundColor(textColor)
+                .background(backgroundColor)
+                .clipShape(.rect(cornerRadius: 12))
+        }
     }
 }
 
