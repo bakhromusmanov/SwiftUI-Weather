@@ -13,71 +13,96 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
-            backgroundView
-            weatherView
-        }
-    }
-    
-    var weatherView: some View {
-        VStack(
-            alignment: .center,
-            spacing: 32
-        ) {
-            Text("Cupertino, CA")
-                .font(.system(.title, weight: .semibold))
-                .foregroundColor(.white)
-                .padding(.top, 16)
-            VStack(spacing: 16) {
-                WeatherImageView(
-                    name: "cloud.sun.fill",
-                    size: .init(width: 160, height: 160)
+            BackgroundView(colors: [.blue, Color("lightBlue")])
+            VStack(spacing: 32) {
+                CityTextView(city: "Cupertino, CA")
+                WeatherStatusView(
+                    temperature: 76,
+                    icon: "cloud.sun.fill"
                 )
-                Text("76°")
-                    .font(.system(size: 64, weight: .regular))
-                    .foregroundColor(.white)
-                forecastView
-                    .padding(.top, 32)
+                HStack(spacing: 16) {
+                    DayView(day: "MON", iconName: "cloud.sun.fill", temperature: 6)
+                    DayView(day: "TUE", iconName: "sun.max.fill", temperature: 4)
+                    DayView(day: "WED", iconName: "wind.snow", temperature: 0)
+                    DayView(day: "THU", iconName: "cloud.snow.fill", temperature: -2)
+                    DayView(day: "FRI", iconName: "cloud.rain.fill", temperature: -4)
+                }
                 Spacer()
-                weatherButton
+                WeatherButton(
+                    title: "Change Time of Day",
+                    textColor: .blue,
+                    backgroundColor: .white,
+                    action: {
+                        print("Button Click")
+                    }
+                )
+                Spacer()
             }
-            Spacer()
         }
     }
+}
+
+struct WeatherButton: View {
+    let title: String
+    let textColor: Color
+    let backgroundColor: Color
+    let action: () -> Void
     
-    var weatherButton: some View {
+    var body: some View {
         Button(
             action: {
-                print("HELLO WORLD!")
+                action()
+            },
+            label: {
+                Text(title)
+                    .padding()
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundColor(textColor)
+                    .background(backgroundColor)
+                    .clipShape(.rect(cornerRadius: 12))
             }
-        ) {
-            Text("Change Time of Day")
-                .font(.system(size: 16, weight: .semibold))
-                .foregroundColor(.blue)
-        }
-        .padding()
-        .background {
-            RoundedRectangle(cornerRadius: 12, style: .circular)
-                .fill(Color.white)
-        }
+        )
     }
+}
+
+struct BackgroundView: View {
+    let colors: [Color]
     
-    var forecastView: some View {
-        HStack(spacing: 16) {
-            DayView(day: "MON", iconName: "cloud.sun.fill", temperature: 6)
-            DayView(day: "TUE", iconName: "sun.max.fill", temperature: 4)
-            DayView(day: "WED", iconName: "wind.snow", temperature: 0)
-            DayView(day: "THU", iconName: "cloud.snow.fill", temperature: -2)
-            DayView(day: "FRI", iconName: "cloud.rain.fill", temperature: -4)
-        }
-    }
-    
-    var backgroundView: some View {
+    var body: some View {
         LinearGradient(
-            gradient: .init(colors: [.blue, Color("lightBlue")]),
+            gradient: .init(colors: colors),
             startPoint: .topLeading,
             endPoint: .bottomTrailing
         )
         .ignoresSafeArea(.all)
+    }
+}
+
+struct WeatherStatusView: View {
+    let temperature: Int
+    let icon: String
+    
+    var body: some View {
+        VStack(spacing: 16) {
+            WeatherImageView(
+                name: icon,
+                size: .init(width: 160, height: 160)
+            )
+            Text("\(temperature)°")
+                .font(.system(size: 64, weight: .regular))
+                .foregroundColor(.white)
+        }
+    }
+}
+
+struct CityTextView: View {
+    let city: String
+    
+    var body: some View {
+        Text(city)
+            .font(.system(.title, weight: .semibold))
+            .foregroundColor(.white)
+            .padding(.top, 16)
     }
 }
 
